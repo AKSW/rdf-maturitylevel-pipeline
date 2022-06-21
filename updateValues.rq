@@ -1,0 +1,26 @@
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX ns0: <http://rdfunit.aksw.org/ns/core#>
+PREFIX mme: <http://stream-ontology.com/maturitymodel/executions/>
+PREFIX dqv: <http://www.w3.org/ns/dqv#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX qb: <http://purl.org/linked-data/cube#>
+prefix sdmx-attribute: <http://purl.org/linked-data/sdmx/2009/attribute#>
+prefix msv: <http://stream-ontology.com/metrics-severity/>
+PREFIX : <http://stream-ontology.com/maturitymodel/>
+
+DELETE { ?qm :measurementValue ?v ;
+			dqv:value ?v }
+INSERT { ?qm :measurementValue 0 ;
+			dqv:value 0 }
+WHERE {
+  ?test a ns0:TestCaseResult ;
+       prov:wasAssociatedWith ?metric .
+  ?qm a dqv:QualityMeasurement ;
+       dqv:isMeasurementOf ?metric .
+  ?metric a dqv:Metric ;
+       msv:hasRatingValueOf ?v .
+  filter not exists { ?test ns0:resultStatus ns0:ResultStatusSuccess }
+}

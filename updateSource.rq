@@ -1,0 +1,10 @@
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix ns0: <http://rdfunit.aksw.org/ns/core#>
+
+DELETE { ?test ns0:source ?ds }
+INSERT { ?test ns0:source <env://datasource_identifier> }
+WHERE {
+  ?test a ns0:TestExecution ;
+  	ns0:source ?ds .
+}

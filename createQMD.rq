@@ -1,0 +1,27 @@
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX ns0: <http://rdfunit.aksw.org/ns/core#>
+PREFIX mme: <http://stream-ontology.com/maturitymodel/executions/>
+PREFIX dqv: <http://www.w3.org/ns/dqv#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX qb: <http://purl.org/linked-data/cube#>
+PREFIX : <http://stream-ontology.com/maturitymodel/>
+
+construct {
+  ?newUri a dqv:QualityMeasurementDataset ;
+    rdfs:label "Quality measurement dataset #1"@en ;
+    rdfs:description "Quality measurement dataset which groups dqv:QualityMeasurement."@en ;
+    prov:startedAtTime ?start ;
+    qb:structure :dsd .
+
+  ?testbed rdfs:seeAlso ?newUri .
+}
+where {
+  	?testbed sh:result ?testresult ;
+        prov:startedAtTime ?start .
+  	?testresult a ns0:TestCaseResult .
+
+    bind(<env://QMD_URI> as ?newUri)
+}

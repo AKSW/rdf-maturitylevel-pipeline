@@ -1,0 +1,43 @@
+PREFIX oa: <http://www.w3.org/ns/oa#>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX ns0: <http://rdfunit.aksw.org/ns/core#>
+PREFIX mme: <http://stream-ontology.com/maturitymodel/executions/>
+PREFIX dqv: <http://www.w3.org/ns/dqv#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX qb: <http://purl.org/linked-data/cube#>
+prefix sdmx-attribute: <http://purl.org/linked-data/sdmx/2009/attribute#>
+prefix msv: <http://stream-ontology.com/metrics-severity/>
+PREFIX : <http://stream-ontology.com/maturitymodel/>
+
+construct {
+  ?ml oa:hasTarget <env://datasource_identifier> ;
+      oa:hasBody ?qmd .
+  <env://datasource_identifier> msv:hasMaturityLevel ?ml .
+}
+where {
+  ?qmd a dqv:QualityMeasurementDataset .
+
+  {
+  	select ?ml ?level
+	WHERE {
+    {
+      select (sum(?v) AS ?total)
+      WHERE {
+          ?qm a dqv:QualityMeasurement ;
+              dqv:value ?v .
+      }
+    }
+
+	?ml a msv:MaturityLevel ;
+		msv:hasRequiredRatingOf ?req ;
+		msv:level ?level .
+
+    Filter (?req >= ?total)
+    }
+    order by asc(?level)
+    limit 1
+  }
+}

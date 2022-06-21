@@ -1,0 +1,13 @@
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX sh: <http://www.w3.org/ns/shacl#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX ns0: <http://rdfunit.aksw.org/ns/core#>
+
+construct { ?testresult prov:wasAssociatedWith ?metric . }
+where {
+  	?testresult a ns0:TestCaseResult ;
+		ns0:testCase ?bn .
+	?bn a ?test .
+  	?test rdfs:seeAlso ?metric .
+}

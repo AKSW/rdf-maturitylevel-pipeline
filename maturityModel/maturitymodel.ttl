@@ -1,0 +1,222 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix ns0: <http://rdfunit.aksw.org/ns/core#> .
+@prefix ns1: <http://www.w3.org/ns/shacl#> .
+@prefix dqv: <http://www.w3.org/ns/dqv#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix : <http://stream-ontology.com/maturitymodel/> .
+@prefix ownshaclcorrectness: <http://stream-ontology.com/maturitymodel/shapes/Correctness/> .
+@prefix msv: <http://stream-ontology.com/metrics-severity/> .
+@prefix mme: <http://stream-ontology.com/maturitymodel/executions/> .
+@prefix sdmx-attribute: <http://purl.org/linked-data/sdmx/2009/attribute#> .
+@prefix oa: <http://www.w3.org/ns/oa#> .
+
+###############################################
+
+# Data cube definitions
+:refMetric  a rdf:Property, qb:DimensionProperty ;
+  rdfs:label "reference metric"@en ;
+  rdfs:range dqv:Metric .
+:refDate  a rdf:Property, qb:DimensionProperty ;
+  rdfs:label "reference date"@en ;
+  rdfs:range dcterms:date . # is xsd:dateTime better?
+:refResource  a rdf:Property, qb:DimensionProperty ;
+  rdfs:label "reference resource"@en ;
+  rdfs:range rdfs:Resource .
+:measurementValue a rdf:Property, qb:MeasureProperty ;
+  rdfs:label "measurement severity"@en ;
+  rdfs:range xsd:integer .
+
+:dsd a qb:DataStructureDefinition;
+  # The dimensions
+  qb:component [ qb:dimension :refMetric; qb:order 1 ] ;
+  qb:component [ qb:dimension :refDate; qb:order 2 ] ;
+  qb:component [ qb:dimension :refResource; qb:order 3 ] ;
+  # The measure(s)
+  qb:component [ qb:measure :measurementValue ] .
+################################################
+
+# Maturity model
+# For each category the dimensions and their metrics
+
+:Accuracy a dqv:Category ; # Subclass of skos:Concept
+  rdfs:label "Accuracy"@en ;
+  skos:prevLabel "Accuracy"@en ;
+  skos:definition ""@en .
+
+:Correctness a dqv:Dimension ;
+  rdfs:label "Correctness"@en ;
+  dqv:inCategory :Accuracy ;
+  sh:shapesGraph <http://stream-ontology.com/maturitymodel/shapes/Correctness/> ;
+  msv:hasMaximumRatingValueOf 4 ;
+  msv:hasMinimumRequiredRatingOf 4 .
+
+:M1 a dqv:Metric ;
+  dqv:inDimension :Correctness ;
+  skos:definition "The source of the result is linked."@en ;
+  dqv:expectedDataType xsd:integer ;
+  msv:hasRatingValueOf "4"^^xsd:integer .
+
+
+:Precision a dqv:Dimension ;
+  rdfs:label "Precision"@en ;
+  dqv:inCategory :Accuracy ;
+  sh:shapesGraph <http://stream-ontology.com/maturitymodel/shapes/Precision/> ;
+  msv:hasMaximumRatingValueOf 1 ;
+  msv:hasMinimumRequiredRatingOf 1 .
+
+:M2 a dqv:Metric ;
+  dqv:inDimension :Precision ;
+  skos:definition "At least two decimals are provided."@en ;
+  dqv:expectedDataType xsd:integer ;
+  msv:hasRatingValueOf "1"^^xsd:integer .
+
+
+:Completeness a dqv:Category ;
+  rdfs:label "Completeness"@en ;
+  skos:prevLabel "Completeness"@en ;
+  skos:definition ""@en .
+
+:Sensitiveness a dqv:Dimension ;
+  rdfs:label "Sensitiveness"@en ;
+  dqv:inCategory :Completeness ;
+  sh:shapesGraph <http://stream-ontology.com/maturitymodel/shapes/Sensitiveness/> ;
+  msv:hasMaximumRatingValueOf 2 ;
+  msv:hasMinimumRequiredRatingOf 2 .
+
+:M3 a dqv:Metric ;
+  dqv:inDimension :Sensitiveness ;
+  skos:definition "Was the measurement done by a known device."@en ;
+  dqv:expectedDataType xsd:integer ;
+  msv:hasRatingValueOf "2"^^xsd:integer .
+
+:Documentation a dqv:Category ;
+  rdfs:label "Documentation"@en ;
+  skos:prevLabel "Documentation"@en ;
+  skos:definition ""@en .
+
+:Conciseness a dqv:Dimension ;
+  rdfs:label "Conciseness"@en ;
+  dqv:inCategory :Documentation ;
+  sh:shapesGraph <http://stream-ontology.com/maturitymodel/shapes/Conciseness/> ;
+  msv:hasMaximumRatingValueOf 1 ;
+  msv:hasMinimumRequiredRatingOf 1 .
+
+:M4 a dqv:Metric ;
+  dqv:inDimension :Conciseness ;
+  skos:definition "Has a low amount of filler words."@en ;
+  dqv:expectedDataType xsd:integer ;
+  msv:hasRatingValueOf "1"^^xsd:integer .
+
+:UsageCML a dqv:Dimension ;
+  rdfs:label "UsageCML"@en ;
+  dqv:inCategory :Documentation ;
+  sh:shapesGraph <http://stream-ontology.com/maturitymodel/shapes/UsageCML/> ;
+  msv:hasMaximumRatingValueOf 1 ;
+  msv:hasMinimumRequiredRatingOf 1 .
+
+:M5 a dqv:Metric ;
+  dqv:inDimension :UsageCML ;
+  skos:definition "Documentation files are using common markup languages."@en ;
+  dqv:expectedDataType xsd:integer ;
+  msv:hasRatingValueOf "1"^^xsd:integer .
+
+:Coherence a dqv:Category ;
+  rdfs:label "Coherence"@en ;
+  skos:prevLabel "Coherence"@en ;
+  skos:definition ""@en .
+
+:Validity a dqv:Dimension ;
+  rdfs:label "Validity"@en ;
+  dqv:inCategory :Coherence ;
+  sh:shapesGraph <http://stream-ontology.com/maturitymodel/shapes/Validity/> ;
+  msv:hasMaximumRatingValueOf 10 ;
+  msv:hasMinimumRequiredRatingOf 0 .
+
+:M6 a dqv:Metric ;
+  dqv:inDimension :Validity ;
+  skos:definition "Values are in range of the specification."@en ;
+  dqv:expectedDataType xsd:integer ;
+  msv:hasRatingValueOf "10"^^xsd:integer .
+
+:Plausibility a dqv:Dimension ;
+  rdfs:label "Plausibility"@en ;
+  dqv:inCategory :Coherence ;
+  sh:shapesGraph <http://stream-ontology.com/maturitymodel/shapes/Plausibility/> ;
+  msv:hasMaximumRatingValueOf 10 ;
+  msv:hasMinimumRequiredRatingOf 0 .
+
+:M7 a dqv:Metric ;
+  dqv:inDimension :Plausibility ;
+  skos:definition "Values are similar to others."@en ;
+  dqv:expectedDataType xsd:integer ;
+  msv:hasRatingValueOf "10"^^xsd:integer .
+
+:Uniqueness a dqv:Dimension ;
+  rdfs:label "Uniqueness"@en ;
+  dqv:inCategory :Coherence ;
+  sh:shapesGraph <http://stream-ontology.com/maturitymodel/shapes/Uniqueness/> ;
+  msv:hasMaximumRatingValueOf 1 ;
+  msv:hasMinimumRequiredRatingOf 1 .
+
+:M8 a dqv:Metric ;
+  dqv:inDimension :Uniqueness ;
+  skos:definition "The combination of the values is unique."@en ;
+  dqv:expectedDataType xsd:integer ;
+  msv:hasRatingValueOf "1"^^xsd:integer .
+
+:Multilingualism a dqv:Category ;
+  rdfs:label "Multilingualism"@en ;
+  skos:prevLabel "Multilingualism"@en ;
+  skos:definition ""@en .
+
+:English a dqv:Dimension ;
+  rdfs:label "English"@en ;
+  dqv:inCategory :Multilingualism ;
+  sh:shapesGraph <http://stream-ontology.com/maturitymodel/shapes/English/> ;
+  msv:hasMaximumRatingValueOf 1 ;
+  msv:hasMinimumRequiredRatingOf 1 .
+
+:M9 a dqv:Metric ;
+  dqv:inDimension :English ;
+  skos:definition "A language detector detected english."@en ;
+  dqv:expectedDataType xsd:integer ;
+  msv:hasRatingValueOf "1"^^xsd:integer .
+
+:German a dqv:Dimension ;
+  rdfs:label "German"@en ;
+  dqv:inCategory :Multilingualism ;
+  sh:shapesGraph <http://stream-ontology.com/maturitymodel/shapes/German/> ;
+  msv:hasMaximumRatingValueOf 1 ;
+  msv:hasMinimumRequiredRatingOf 1 .
+
+:M10 a dqv:Metric ;
+  dqv:inDimension :German ;
+  skos:definition "A language detector detected german."@en ;
+  dqv:expectedDataType xsd:integer ;
+  msv:hasRatingValueOf "1"^^xsd:integer .
+
+################################################
+
+# Level
+
+msv:MaturityLevel0 a msv:MaturityLevel ;
+  msv:hasRequiredRatingOf 0 ;
+  msv:level 0 ;
+  oa:motivatedBy msv:Motivation ;
+  rdfs:label "Maturity level 0"@en ;
+  dc:description "The maturity level which has no requirements and thus applies to every dataset."@en .
+
+msv:MaturityLevel1 a msv:MaturityLevel ;
+  msv:hasRequiredRatingOf 32 ;
+  msv:level 1 ;
+  oa:motivatedBy msv:Motivation ;
+  rdfs:label "Maturity level 1"@en ;
+  dc:description "The maturity level which has the highest requirements in which all dimensions have to have the maximum rating value."@en .
