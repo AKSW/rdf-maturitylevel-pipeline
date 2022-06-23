@@ -1,6 +1,7 @@
 .nextflow
 nextflow
 work
+.nextflow.log*
 
 main.ttl
 updatedValues.ttl

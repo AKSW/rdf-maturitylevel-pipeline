@@ -11,7 +11,7 @@ URI="http://stream-ontology.com/maturitymodel/executions/"
 export QMD_URI="$URI$UUID"
 
 # run RDFUnit
-docker run --rm -it --entrypoint="/bin/bash" -v $PWD:/app/my aksw/rdfunit -c "cd my && java -jar /app/rdfunit-validate.jar -A -v -d ./$file_data -s ./$file_shapes -r shacl -o turtle -C -f /tmp/ -r rlog && cp /tmp/results/._data.ttl.shaclTestCaseResult.ttl /app/my/RDFUnit_manual_results.ttl && chmod 777 ./RDFUnit_manual_results.ttl"
+docker run --rm -it --entrypoint="/bin/bash" -v $PWD:/app/my aksw/rdfunit -c "cd my && java -jar /app/rdfunit-validate.jar -A -v -d ./$file_data -s ./$file_shapes -r shacl -o turtle -C -f /tmp/ && cp /tmp/results/._data.ttl.shaclTestCaseResult.ttl /app/my/RDFUnit_manual_results.ttl && chmod 777 ./RDFUnit_manual_results.ttl"
 
 echo "---------------------------------"
 
