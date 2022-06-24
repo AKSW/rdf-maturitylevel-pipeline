@@ -52,10 +52,11 @@ process concat {
       file "./main.ttl" into result_concat
 
     """
-    rapper -o ntriples -i turtle $maturitymodel > concat.n3
-    rapper -o ntriples -i turtle $result_rdfunit >> concat.n3
-    rapper -o ntriples -i turtle $result_seeAlsoCreation >> concat.n3
-    rapper -o turtle -i ntriples ./concat.n3 > ./main.ttl
+    rapper -o ntriples -i turtle $maturitymodel > temp.n3
+    rapper -o turtle -i ntriples temp.n3 > concat.ttl
+    rapper -o turtle -i turtle $result_rdfunit >> concat.ttl
+    rapper -o turtle -i turtle $result_seeAlsoCreation >> concat.ttl
+    rapper -o turtle -i turtle ./concat.ttl > ./main.ttl
     """
 }
 

@@ -10,7 +10,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 PREFIX qb: <http://purl.org/linked-data/cube#>
 prefix sdmx-attribute: <http://purl.org/linked-data/sdmx/2009/attribute#>
 prefix msv: <http://stream-ontology.com/metrics-severity/>
-PREFIX : <http://stream-ontology.com/maturitymodel/>
+PREFIX mm: <http://stream-ontology.com/maturitymodel/>
 
 construct {
   ?ml oa:hasTarget <env://datasource_identifier> ;

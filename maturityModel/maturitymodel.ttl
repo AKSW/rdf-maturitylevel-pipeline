@@ -11,7 +11,8 @@
 @prefix ns1: <http://www.w3.org/ns/shacl#> .
 @prefix dqv: <http://www.w3.org/ns/dqv#> .
 @prefix qb: <http://purl.org/linked-data/cube#> .
-@prefix : <http://stream-ontology.com/maturitymodel/> .
+@prefix : <http://example.domain.net/path/> .
+@prefix mm: <http://stream-ontology.com/maturitymodel/> .
 @prefix ownshaclcorrectness: <http://stream-ontology.com/maturitymodel/shapes/Correctness/> .
 @prefix msv: <http://stream-ontology.com/metrics-severity/> .
 @prefix mme: <http://stream-ontology.com/maturitymodel/executions/> .
@@ -21,26 +22,26 @@
 ###############################################
 
 # Data cube definitions
-:refMetric  a rdf:Property, qb:DimensionProperty ;
+mm:refMetric  a rdf:Property, qb:DimensionProperty ;
   rdfs:label "reference metric"@en ;
   rdfs:range dqv:Metric .
-:refDate  a rdf:Property, qb:DimensionProperty ;
+mm:refDate  a rdf:Property, qb:DimensionProperty ;
   rdfs:label "reference date"@en ;
   rdfs:range dcterms:date . # is xsd:dateTime better?
-:refResource  a rdf:Property, qb:DimensionProperty ;
+mm:refResource  a rdf:Property, qb:DimensionProperty ;
   rdfs:label "reference resource"@en ;
   rdfs:range rdfs:Resource .
-:measurementValue a rdf:Property, qb:MeasureProperty ;
+mm:measurementValue a rdf:Property, qb:MeasureProperty ;
   rdfs:label "measurement severity"@en ;
   rdfs:range xsd:integer .
 
-:dsd a qb:DataStructureDefinition;
+mm:dsd a qb:DataStructureDefinition;
   # The dimensions
-  qb:component [ qb:dimension :refMetric; qb:order 1 ] ;
-  qb:component [ qb:dimension :refDate; qb:order 2 ] ;
-  qb:component [ qb:dimension :refResource; qb:order 3 ] ;
+  qb:component [ qb:dimension mm:refMetric; qb:order 1 ] ;
+  qb:component [ qb:dimension mm:refDate; qb:order 2 ] ;
+  qb:component [ qb:dimension mm:refResource; qb:order 3 ] ;
   # The measure(s)
-  qb:component [ qb:measure :measurementValue ] .
+  qb:component [ qb:measure mm:measurementValue ] .
 ################################################
 
 # Maturity model
