@@ -22,20 +22,20 @@ where {
 
   {
   	select ?ml ?level
-	WHERE {
-    {
-      select (sum(?v) AS ?total)
-      WHERE {
-          ?qm a dqv:QualityMeasurement ;
-              dqv:value ?v .
+  	WHERE {
+      {
+        select (sum(?v) AS ?total)
+        WHERE {
+            ?qm a dqv:QualityMeasurement ;
+                dqv:value ?v .
+        }
       }
-    }
 
-	?ml a msv:MaturityLevel ;
-		msv:hasRequiredRatingOf ?req ;
-		msv:level ?level .
+    	?ml a msv:MaturityLevel ;
+    		msv:hasRequiredRatingOf ?req ;
+    		msv:level ?level .
 
-    Filter (?req >= ?total)
+      Filter (?req <= ?total)
     }
     order by asc(?level)
     limit 1
