@@ -65,12 +65,12 @@ process manipulation {
 
     input:
       path result_concat
-      path updateSource from "$projectDir/updateSource.rq"
-      path createMetricRelation from "$projectDir/createMetricRelation.rq"
-      path createQMD from "$projectDir/createQMD.rq"
-      path createQM from "$projectDir/createQM.rq"
-      path updateValues from "$projectDir/updateValues.rq"
-      path detectMaturityLevel from "$projectDir/detectMaturityLevel.rq"
+      path updateSource from "$projectDir/sparql/updateSource.rq"
+      path createMetricRelation from "$projectDir/sparql/createMetricRelation.rq"
+      path createQMD from "$projectDir/sparql/createQMD.rq"
+      path createQM from "$projectDir/sparql/createQM.rq"
+      path updateValues from "$projectDir/sparql/updateValues.rq"
+      path detectMaturityLevel from "$projectDir/sparql/detectMaturityLevel.rq"
 
     output:
       file "final.ttl" into result_manipulation
