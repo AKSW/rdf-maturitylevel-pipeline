@@ -1,15 +1,8 @@
 #!/usr/bin/env nextflow
 
-// Files - do not work
-// some files have to be input and others direct parameter in the command
-//shapes = file("maturityModel/shapes.ttl")
-//data = file("data.ttl")
-//model = file("maturityModel/maturitymodel.ttl")
-
-// Variables - they have to be exported into each container where they are needed
-mydatasource_identifier="http://example.de/dataset1"
+// Variables - local use only
 myUUID = UUID.randomUUID().toString()
-myQMD_URI = "http://stream-ontology.com/maturitymodel/executions/"+myUUID
+myQMD_URI = "$QMD_NAMESPACE"+myUUID
 
 process rdfunit {
     container "aksw/rdfunit"
@@ -17,14 +10,14 @@ process rdfunit {
     debug true
 
     input:
-      path data from "$projectDir/data.ttl"
+      path data from "$projectDir/$FILE_DATA"
       // shapes does only work here when used directly in the cmd
 
     output:
       file "./RDFUnit_manual_results.ttl" into result_rdfunit
 
     """
-    java -jar /app/rdfunit-validate.jar -A -v -d $data -s $projectDir/maturityModel/shapes.ttl -r shacl -o turtle -C -f /tmp/
+    java -jar /app/rdfunit-validate.jar -A -v -d $data -s $projectDir/$FILE_SHAPES -r shacl -o turtle -C -f /tmp/
     cp /tmp/results/data.ttl.shaclTestCaseResult.ttl ./RDFUnit_manual_results.ttl
     """
 }
@@ -34,7 +27,7 @@ process seeAlsoCreation {
     debug true
 
     input:
-      path shapes from "$projectDir/maturityModel/shapes.ttl"
+      path shapes from "$projectDir/$FILE_SHAPES"
 
     output:
       file "seeAlso.ttl" into result_seeAlsoCreation
@@ -53,7 +46,7 @@ process concat {
     input:
       path result_rdfunit
       path result_seeAlsoCreation
-      path maturitymodel from "$projectDir/maturityModel/maturitymodel.ttl"
+      path maturitymodel from "$projectDir/$FILE_MODEL"
 
     output:
       file "./main.ttl" into result_concat
