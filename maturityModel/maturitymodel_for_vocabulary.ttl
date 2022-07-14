@@ -138,7 +138,7 @@ mm:dsd a qb:DataStructureDefinition;
       dqv:expectedDataType xsd:integer ;
       msv:hasRatingValueOf "2"^^xsd:integer .
 
-:Documentation a dqv:Category ; -> uRI to webpage; details as metadata
+:Documentation a dqv:Category ;
   rdfs:label "Documentation"@en ;
   skos:prevLabel "Documentation"@en ;
   skos:definition ""@en .

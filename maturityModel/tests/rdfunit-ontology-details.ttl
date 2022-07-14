@@ -7,12 +7,13 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rut: <http://rdfunit.aksw.org/ns/core#> .
 @prefix rutp: <http://rdfunit.aksw.org/data/patterns#> .
-@prefix rutt: <http://rdfunit.aksw.org/data/tests#> .
+@prefix rutt: <https://github.com/AKSW/rdf-maturitylevel-pipeline/Metadata/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix vann: <http://purl.org/vocab/vann/> .
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix spin: <http://spinrdf.org/spin#> .
+@prefix : <https://github.com/AKSW/rdf-maturitylevel-pipeline/maturitymodel> .
 
 rutt:ontology-details
     a rut:ManualTestCase ;
@@ -37,4 +38,5 @@ rutt:ontology-details
           } """ ;
 
     rut:testCaseLogLevel
-              rlog:WARN .
+              rlog:WARN ;
+    rdfs:seeAlso :M4 .

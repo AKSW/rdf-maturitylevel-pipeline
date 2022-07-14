@@ -7,117 +7,53 @@
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rut: <http://rdfunit.aksw.org/ns/core#> .
 @prefix rutp: <http://rdfunit.aksw.org/data/patterns#> .
-@prefix rutt: <http://rdfunit.aksw.org/data/tests#> .
+@prefix rutt: <https://github.com/AKSW/rdf-maturitylevel-pipeline/Readability/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix vann: <http://purl.org/vocab/vann/> .
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix : <https://github.com/AKSW/rdf-maturitylevel-pipeline/maturitymodel> .
 @prefix spin: <http://spinrdf.org/spin#> .
 
-rutt:class_names_camel_case
-    dcterms:description "All class names should be written in camel case" ;
-    rut:appliesTo rut:Schema ;
-    rut:generated rut:ManuallyGenerated ;
-    rut:references owl:Class ;
-    rut:source <http://www.w3.org/2000/01/rdf-schema#> ;
-    rut:sparqlPrevalence """ SELECT (count(?this) AS ?total) WHERE {
-                                 ?this a owl:Class .
-                                 ?ontology a owl:Ontology.
-                                 FILTER (
-                                   strStarts(str(?this), str(?ontology))
-                                 )
-          } """ ;
-    rut:sparqlWhere """ {
-        ?ontology a owl:Ontology.
-        ?this a owl:Class .
-        FILTER (
-          strStarts(str(?this), str(?ontology))
-        )
-        bind(substr(str(?this), strlen(str(?ontology))) as ?className)
-        FILTER (
-          REGEX(str(?className),\"^[A-Z]\")
-        )
-         }""" ;
-    rut:testCaseLogLevel rlog:WARN ;
-    a rut:ManualTestCase .
-
-rutt:english-language-tag
+<http://stream-ontology.com/maturitymodel/shapes/English/english-language-tag>
     dcterms:description "For each class and property at least a label in english should be available." ;
     rut:appliesTo rut:Schema ;
     rut:generated rut:ManuallyGenerated ;
     rut:references rdf:Property, owl:DatatypeProperty, owl:ObjectProperty ;
     rut:source <http://www.w3.org/2000/01/rdf-schema#> ;
     rut:sparqlPrevalence """ SELECT (count(?this) AS ?total) WHERE {
+      VALUES ?t {rdf:Property owl:DataProperty owl:ObjectProperty rdfs:Class owl:Class}
       ?this a ?t
-      FILTER (?t in (rdf:Property, owl:DataProperty, owl:ObjectProperty, rdfs:Class, owl:Class))
 
-      ?this rdfs:label ?l
-          } """ ;
+      # omit built-in vocab entities
+      FILTER(
+        !(strstarts(str(?this), str(rdf:)) ||
+          strstarts(str(?this), str(rdfs:)) ||
+          strstarts(str(?this), str(owl:)) ||
+          strstarts(str(?this), \"http://www.w3.org/2004/02/skos/core#\")
+        )
+      )
+    } """ ;
     rut:sparqlWhere """ {
+      VALUES ?t {rdf:Property owl:DataProperty owl:ObjectProperty rdfs:Class owl:Class}
       ?this a ?t
-      FILTER (?t in (rdf:Property, owl:DataProperty, owl:ObjectProperty, rdfs:Class, owl:Class))
 
-      ?this rdfs:label ?l
-      FILTER(lang(?l) != \"en\")
-         }""" ;
+      # omit built-in vocab entities
+      FILTER(
+        !(strstarts(str(?this), str(rdf:)) ||
+          strstarts(str(?this), str(rdfs:)) ||
+          strstarts(str(?this), str(owl:)) ||
+          strstarts(str(?this), \"http://www.w3.org/2004/02/skos/core#\")
+        )
+      )
+
+      FILTER NOT EXISTS {?this rdfs:label ?l FILTER(langmatches(lang(?l), \"en\"))}
+    }""" ;
     rut:testCaseLogLevel rlog:WARN ;
-    a rut:ManualTestCase .
+    a rut:ManualTestCase ;
+    rdfs:seeAlso :M10 .
 
-rutt:expressive-classes
-    dcterms:description "Classes should be expressive and not include class in its name." ;
-    rut:appliesTo rut:Schema ;
-    rut:generated rut:ManuallyGenerated ;
-    rut:references owl:Class ;
-    rut:source <http://www.w3.org/2000/01/rdf-schema#> ;
-    rut:sparqlPrevalence """ SELECT (count(?this) AS ?total) WHERE {
-      ?this a owl:Class .
-      ?ontology a owl:Ontology.
-      FILTER (
-        strStarts(str(?this), str(?ontology))
-      )
-          } """ ;
-    rut:sparqlWhere """ {
-      ?this a owl:Class .
-      ?ontology a owl:Ontology.
-      FILTER (
-        strStarts(str(?this), str(?ontology))
-      )
-      bind(substr(str(?this), strlen(str(?ontology))) as ?className)
-      FILTER (
-        REGEX(STR(?className), \"class\", \"i\")
-      )
-         }""" ;
-    rut:testCaseLogLevel rlog:WARN ;
-    a rut:ManualTestCase .
-
-rutt:expressive-properties
-    dcterms:description "Properties should be expressive and not include property in its name." ;
-    rut:appliesTo rut:Schema ;
-    rut:generated rut:ManuallyGenerated ;
-    rut:references rdf:Property, owl:DatatypeProperty, owl:ObjectProperty ;
-    rut:source <http://www.w3.org/2000/01/rdf-schema#> ;
-    rut:sparqlPrevalence """ SELECT (count(?this) AS ?total) WHERE {
-      ?this a ?t .
-      ?ontology a owl:Ontology.
-      FILTER (
-        strStarts(str(?this), str(?ontology)) && ?t in (rdf:Property, owl:DatatypeProperty, owl:ObjectProperty)
-      )
-          } """ ;
-    rut:sparqlWhere """ {
-      ?this a ?t .
-      ?ontology a owl:Ontology.
-      FILTER (
-        strStarts(str(?this), str(?ontology)) && ?t in (rdf:Property, owl:DatatypeProperty, owl:ObjectProperty)
-      )
-      bind(substr(str(?this), strlen(str(?ontology))) as ?propertyName)
-      FILTER (
-        REGEX(STR(?propertyName), \"property\", \"i\")
-      )
-         }""" ;
-    rut:testCaseLogLevel rlog:WARN ;
-    a rut:ManualTestCase .
-
-rutt:has-in-relations
+<https://github.com/AKSW/rdf-maturitylevel-pipeline/Inversive/has-in-relations>
     dcterms:description "Properties should start with has." ;
     rut:appliesTo rut:Schema ;
     rut:generated rut:ManuallyGenerated ;
@@ -164,9 +100,10 @@ rutt:has-in-relations
       )
          }""" ;
     rut:testCaseLogLevel rlog:WARN ;
-    a rut:ManualTestCase .
+    a rut:ManualTestCase ;
+    rdfs:seeAlso :M1 .
 
-rutt:inverse-of-correct-naming
+<https://github.com/AKSW/rdf-maturitylevel-pipeline/Inversive/inverse-of-correct-naming>
     dcterms:description "If there is a relation <> inverse-relation pair, the inverse relation should be prefixed with is and suffixed with Of." ;
     rut:appliesTo rut:Schema ;
     rut:generated rut:ManuallyGenerated ;
@@ -191,9 +128,10 @@ rutt:inverse-of-correct-naming
       FILTER(?actual != ?expected)
          }""" ;
     rut:testCaseLogLevel rlog:WARN ;
-    a rut:ManualTestCase .
+    a rut:ManualTestCase ;
+    rdfs:seeAlso :M2 .
 
-rutt:ontology-details
+<https://github.com/AKSW/rdf-maturitylevel-pipeline/Metadata/ontology-details>
     dcterms:description "The ontology should provide some basic metadata, like rdfs:comment, dct:creator, rdfs:label, owl:versionInfo, dct:modified and owl:priorVersion." ;
     rut:appliesTo rut:Schema ;
     rut:generated rut:ManuallyGenerated ;
@@ -214,28 +152,90 @@ rutt:ontology-details
       }
          }""" ;
     rut:testCaseLogLevel rlog:WARN ;
-    a rut:ManualTestCase .
+    a rut:ManualTestCase ;
+    rdfs:seeAlso :M4 .
 
-rutt:ontology-uri-slash-at-end
-    dcterms:description "All resources defined by an ontology should end their base URI with a slash" ;
+rutt:class_names_camel_case
+    dcterms:description "All class names should be written in camel case" ;
     rut:appliesTo rut:Schema ;
     rut:generated rut:ManuallyGenerated ;
-    rut:references rdf:type ;
+    rut:references owl:Class ;
     rut:source <http://www.w3.org/2000/01/rdf-schema#> ;
     rut:sparqlPrevalence """ SELECT (count(?this) AS ?total) WHERE {
-                                 ?this a owl:Ontology .
+                                 ?this a owl:Class .
+                                 ?ontology a owl:Ontology.
                                  FILTER (
-                                   isIRI(?this)
+                                   strStarts(str(?this), str(?ontology))
                                  )
           } """ ;
     rut:sparqlWhere """ {
-        ?this a owl:Ontology .
+        ?ontology a owl:Ontology.
+        ?this a owl:Class .
         FILTER (
-          isIRI(?this) && !strEnds(str(?this), \"/\")
+          strStarts(str(?this), str(?ontology))
         )
-        bind(\"test\" as ?message)
-        bind(?this as ?resource)
+        bind(substr(str(?this), strlen(str(?ontology))) as ?className)
+        FILTER (
+          REGEX(str(?className),\"^[A-Z]\")
+        )
          }""" ;
-    rut:testCaseLogLevel rlog:ERROR ;
-    a rut:ManualTestCase .
+    rut:testCaseLogLevel rlog:WARN ;
+    a rut:ManualTestCase ;
+    rdfs:seeAlso :M7 .
+
+rutt:expressive-classes
+    dcterms:description "Classes should be expressive and not include class in its name." ;
+    rut:appliesTo rut:Schema ;
+    rut:generated rut:ManuallyGenerated ;
+    rut:references owl:Class ;
+    rut:source <http://www.w3.org/2000/01/rdf-schema#> ;
+    rut:sparqlPrevalence """ SELECT (count(?this) AS ?total) WHERE {
+      ?this a owl:Class .
+      ?ontology a owl:Ontology.
+      FILTER (
+        strStarts(str(?this), str(?ontology))
+      )
+          } """ ;
+    rut:sparqlWhere """ {
+      ?this a owl:Class .
+      ?ontology a owl:Ontology.
+      FILTER (
+        strStarts(str(?this), str(?ontology))
+      )
+      bind(substr(str(?this), strlen(str(?ontology))) as ?className)
+      FILTER (
+        REGEX(STR(?className), \"class\", \"i\")
+      )
+         }""" ;
+    rut:testCaseLogLevel rlog:WARN ;
+    a rut:ManualTestCase ;
+    rdfs:seeAlso :M8 .
+
+rutt:expressive-properties
+    dcterms:description "Properties should be expressive and not include property in its name." ;
+    rut:appliesTo rut:Schema ;
+    rut:generated rut:ManuallyGenerated ;
+    rut:references rdf:Property, owl:DatatypeProperty, owl:ObjectProperty ;
+    rut:source <http://www.w3.org/2000/01/rdf-schema#> ;
+    rut:sparqlPrevalence """ SELECT (count(?this) AS ?total) WHERE {
+      ?this a ?t .
+      ?ontology a owl:Ontology.
+      FILTER (
+        strStarts(str(?this), str(?ontology)) && ?t in (rdf:Property, owl:DatatypeProperty, owl:ObjectProperty)
+      )
+          } """ ;
+    rut:sparqlWhere """ {
+      ?this a ?t .
+      ?ontology a owl:Ontology.
+      FILTER (
+        strStarts(str(?this), str(?ontology)) && ?t in (rdf:Property, owl:DatatypeProperty, owl:ObjectProperty)
+      )
+      bind(substr(str(?this), strlen(str(?ontology))) as ?propertyName)
+      FILTER (
+        REGEX(STR(?propertyName), \"property\", \"i\")
+      )
+         }""" ;
+    rut:testCaseLogLevel rlog:WARN ;
+    a rut:ManualTestCase ;
+    rdfs:seeAlso :M8 .
 

@@ -7,12 +7,13 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rut: <http://rdfunit.aksw.org/ns/core#> .
 @prefix rutp: <http://rdfunit.aksw.org/data/patterns#> .
-@prefix rutt: <http://rdfunit.aksw.org/data/tests#> .
+@prefix rutt: <http://stream-ontology.com/maturitymodel/shapes/English/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
 @prefix vann: <http://purl.org/vocab/vann/> .
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix spin: <http://spinrdf.org/spin#> .
+@prefix : <https://github.com/AKSW/rdf-maturitylevel-pipeline/maturitymodel> .
 
 rutt:english-language-tag
     a rut:ManualTestCase ;
@@ -23,16 +24,16 @@ rutt:english-language-tag
     rut:source <http://www.w3.org/2000/01/rdf-schema#> ;
     rut:sparqlWhere """ {
       VALUES ?t {rdf:Property owl:DataProperty owl:ObjectProperty rdfs:Class owl:Class}
-      ?this a ?t 
+      ?this a ?t
 
       # omit built-in vocab entities
       FILTER(
-        !(strstarts(str(?this), str(rdf:)) || 
+        !(strstarts(str(?this), str(rdf:)) ||
           strstarts(str(?this), str(rdfs:)) ||
-          strstarts(str(?this), str(owl:)) ||  
-          strstarts(str(?this), "http://www.w3.org/2004/02/skos/core#")  
-        )  
-      ) 
+          strstarts(str(?this), str(owl:)) ||
+          strstarts(str(?this), "http://www.w3.org/2004/02/skos/core#")
+        )
+      )
 
       FILTER NOT EXISTS {?this rdfs:label ?l FILTER(langmatches(lang(?l), "en"))}
     }""" ;
@@ -42,13 +43,14 @@ rutt:english-language-tag
 
       # omit built-in vocab entities
       FILTER(
-        !(strstarts(str(?this), str(rdf:)) || 
+        !(strstarts(str(?this), str(rdf:)) ||
           strstarts(str(?this), str(rdfs:)) ||
-          strstarts(str(?this), str(owl:)) ||  
+          strstarts(str(?this), str(owl:)) ||
           strstarts(str(?this), "http://www.w3.org/2004/02/skos/core#")
-        )  
-      ) 
+        )
+      )
     } """ ;
 
     rut:testCaseLogLevel
-              rlog:WARN .
+              rlog:WARN  ;
+    rdfs:seeAlso :M10 .
