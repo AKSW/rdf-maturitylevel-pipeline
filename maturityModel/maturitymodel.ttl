@@ -6,17 +6,11 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
-@prefix prov: <http://www.w3.org/ns/prov#> .
-@prefix ns0: <http://rdfunit.aksw.org/ns/core#> .
-@prefix ns1: <http://www.w3.org/ns/shacl#> .
 @prefix dqv: <http://www.w3.org/ns/dqv#> .
 @prefix qb: <http://purl.org/linked-data/cube#> .
 @prefix : <http://example.domain.net/path/> .
 @prefix mm: <http://stream-ontology.com/maturitymodel/> .
-@prefix ownshaclcorrectness: <http://stream-ontology.com/maturitymodel/shapes/Correctness/> .
 @prefix msv: <http://stream-ontology.com/metrics-severity/> .
-@prefix mme: <http://stream-ontology.com/maturitymodel/executions/> .
-@prefix sdmx-attribute: <http://purl.org/linked-data/sdmx/2009/attribute#> .
 @prefix oa: <http://www.w3.org/ns/oa#> .
 
 ###############################################

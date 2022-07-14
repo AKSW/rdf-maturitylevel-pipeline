@@ -1,0 +1,200 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dqv: <http://www.w3.org/ns/dqv#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix : <https://github.com/AKSW/rdf-maturitylevel-pipeline/maturitymodel> .
+@prefix mm: <http://stream-ontology.com/maturitymodel/> .
+@prefix msv: <http://stream-ontology.com/metrics-severity/> .
+@prefix oa: <http://www.w3.org/ns/oa#> .
+
+###############################################
+
+# Data cube definitions
+mm:refMetric  a rdf:Property, qb:DimensionProperty ;
+  rdfs:label "reference metric"@en ;
+  rdfs:range dqv:Metric .
+mm:refDate  a rdf:Property, qb:DimensionProperty ;
+  rdfs:label "reference date"@en ;
+  rdfs:range dcterms:date . # is xsd:dateTime better?
+mm:refResource  a rdf:Property, qb:DimensionProperty ;
+  rdfs:label "reference resource"@en ;
+  rdfs:range rdfs:Resource .
+mm:measurementValue a rdf:Property, qb:MeasureProperty ;
+  rdfs:label "measurement severity"@en ;
+  rdfs:range xsd:integer .
+
+mm:dsd a qb:DataStructureDefinition;
+  # The dimensions
+  qb:component [ qb:dimension mm:refMetric; qb:order 1 ] ;
+  qb:component [ qb:dimension mm:refDate; qb:order 2 ] ;
+  qb:component [ qb:dimension mm:refResource; qb:order 3 ] ;
+  # The measure(s)
+  qb:component [ qb:measure mm:measurementValue ] .
+################################################
+
+# Maturity model
+# For each category the dimensions and their metrics
+:Consistency a dqv:Category ; # Subclass of skos:Concept
+  rdfs:label "Consistency"@en ;
+  skos:prevLabel "Consistency"@en ;
+  skos:definition ""@en .
+
+  :Inversive a dqv:Dimension ;
+    rdfs:label "Inversive"@en ;
+    dqv:inCategory :Consistency ;
+    sh:shapesGraph <https://github.com/AKSW/rdf-maturitylevel-pipeline/Inversive/> ;
+    msv:hasMaximumRatingValueOf 2 ;
+    msv:hasMinimumRequiredRatingOf 0 .
+
+    :M1 a dqv:Metric ;
+      dqv:inDimension :Inversive ;
+      skos:definition "Correct naming of has in relations."@en ;
+      dqv:expectedDataType xsd:integer ;
+      msv:hasRatingValueOf "1"^^xsd:integer .
+
+    :M2 a dqv:Metric ;
+      dqv:inDimension :Inversive ;
+      skos:definition "Correct naming of inversive defined properties."@en ;
+      dqv:expectedDataType xsd:integer ;
+      msv:hasRatingValueOf "1"^^xsd:integer .
+
+  :Namespaces a dqv:Dimension ;
+    rdfs:label "Namespaces"@en ;
+    dqv:inCategory :Consistency ;
+    sh:shapesGraph <https://github.com/AKSW/rdf-maturitylevel-pipeline/Namespaces/> ;
+    msv:hasMaximumRatingValueOf 5 ;
+    msv:hasMinimumRequiredRatingOf 5 .
+
+    :M3 a dqv:Metric ;
+      dqv:inDimension :Namespaces ;
+      skos:definition "Ontology namespace does not include example.com and has a valid ending character."@en ;
+      dqv:expectedDataType xsd:integer ;
+      msv:hasRatingValueOf "5"^^xsd:integer .
+
+:Completeness a dqv:Category ; # Subclass of skos:Concept
+  rdfs:label "Completeness"@en ;
+  skos:prevLabel "Completeness"@en ;
+  skos:definition ""@en .
+
+  :Metadata a dqv:Dimension ;
+    rdfs:label "Metadata"@en ;
+    dqv:inCategory :Completeness ;
+    sh:shapesGraph <https://github.com/AKSW/rdf-maturitylevel-pipeline/Metadata/> ;
+    msv:hasMaximumRatingValueOf 3 ;
+    msv:hasMinimumRequiredRatingOf 3 .
+
+    :M4 a dqv:Metric ;
+      dqv:inDimension :Metadata ;
+      skos:definition "The ontology does provide the minimum of metadata."@en ;
+      dqv:expectedDataType xsd:integer ;
+      msv:hasRatingValueOf "3"^^xsd:integer .
+
+  :Linking a dqv:Dimension ;
+    rdfs:label "Linking"@en ;
+    dqv:inCategory :Completeness ;
+    sh:shapesGraph <https://github.com/AKSW/rdf-maturitylevel-pipeline/Linking/> ;
+    msv:hasMaximumRatingValueOf 3 ;
+    msv:hasMinimumRequiredRatingOf 2 .
+
+    :M5 a dqv:Metric ;
+      dqv:inDimension :Linking ;
+      skos:definition "Common vocabularies are used."@en ;
+      dqv:expectedDataType xsd:integer ;
+      msv:hasRatingValueOf "2"^^xsd:integer .
+
+    :M6 a dqv:Metric ;
+      dqv:inDimension :Linking ;
+      skos:definition "Classes or properties of other vocabularies are used ."@en ;
+      dqv:expectedDataType xsd:integer ;
+      msv:hasRatingValueOf "1"^^xsd:integer .
+
+:Conciseness a dqv:Category ; # Subclass of skos:Concept
+  rdfs:label "Conciseness"@en ;
+  skos:prevLabel "Conciseness"@en ;
+  skos:definition ""@en .
+
+  :Readability a dqv:Dimension ;
+    rdfs:label "Readability"@en ;
+    dqv:inCategory :Conciseness ;
+    sh:shapesGraph <https://github.com/AKSW/rdf-maturitylevel-pipeline/Readability/> ;
+    msv:hasMaximumRatingValueOf 3 ;
+    msv:hasMinimumRequiredRatingOf 0 .
+
+    :M7 a dqv:Metric ;
+      dqv:inDimension :Readability ;
+      skos:definition "Camel case used in class names."@en ;
+      dqv:expectedDataType xsd:integer ;
+      msv:hasRatingValueOf "1"^^xsd:integer .
+
+    :M8 a dqv:Metric ;
+      dqv:inDimension :Readability ;
+      skos:definition "Classes and properties are expressive."@en ;
+      dqv:expectedDataType xsd:integer ;
+      msv:hasRatingValueOf "2"^^xsd:integer .
+
+:Documentation a dqv:Category ; -> uRI to webpage; details as metadata
+  rdfs:label "Documentation"@en ;
+  skos:prevLabel "Documentation"@en ;
+  skos:definition ""@en .
+
+  :Accessible a dqv:Dimension ;
+    rdfs:label "Accessible"@en ;
+    dqv:inCategory :Documentation ;
+    sh:shapesGraph <https://github.com/AKSW/rdf-maturitylevel-pipeline/Accessible/> ;
+    msv:hasMaximumRatingValueOf 1 ;
+    msv:hasMinimumRequiredRatingOf 1 .
+
+    :M9 a dqv:Metric ;
+      dqv:inDimension :Accessible ;
+      skos:definition "The URI of the HTML documentation is included in the ontologies metadata."@en ;
+      dqv:expectedDataType xsd:integer ;
+      msv:hasRatingValueOf "1"^^xsd:integer .
+
+:Multilingualism a dqv:Category ;
+  rdfs:label "Multilingualism"@en ;
+  skos:prevLabel "Multilingualism"@en ;
+  skos:definition ""@en .
+
+  :English a dqv:Dimension ;
+    rdfs:label "English"@en ;
+    dqv:inCategory :Multilingualism ;
+    sh:shapesGraph <http://stream-ontology.com/maturitymodel/shapes/English/> ;
+    msv:hasMaximumRatingValueOf 7 ;
+    msv:hasMinimumRequiredRatingOf 7 .
+
+    :M10 a dqv:Metric ;
+      dqv:inDimension :English ;
+      skos:definition "A language detector detected english."@en ;
+      dqv:expectedDataType xsd:integer ;
+      msv:hasRatingValueOf "7"^^xsd:integer .
+
+################################################
+
+# Level
+
+msv:MaturityLevel0 a msv:MaturityLevel ;
+  msv:hasRequiredRatingOf 0 ;
+  msv:level 0 ;
+  oa:motivatedBy msv:Motivation ;
+  rdfs:label "Maturity level 0"@en ;
+  dc:description "The maturity level which has no requirements and thus applies to every vocabluary."@en .
+
+msv:MaturityLevel1 a msv:MaturityLevel ;
+  msv:hasRequiredRatingOf 18 ;
+  msv:level 1 ;
+  oa:motivatedBy msv:Motivation ;
+  rdfs:label "Maturity level 1"@en ;
+  dc:description "The vocabulary fulfills the basic requirements to be used by others."@en .
+
+msv:MaturityLevel2 a msv:MaturityLevel ;
+  msv:hasRequiredRatingOf 24 ;
+  msv:level 2 ;
+  oa:motivatedBy msv:Motivation ;
+  rdfs:label "Maturity level 2"@en ;
+  dc:description "The vocabulary fulfills all requirements."@en .
