@@ -37,7 +37,7 @@ where {
 
       Filter (?req <= ?total)
     }
-    order by asc(?level)
+    order by desc(?level)
     limit 1
   }
 }

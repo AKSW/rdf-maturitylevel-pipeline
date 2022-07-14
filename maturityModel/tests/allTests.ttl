@@ -12,7 +12,7 @@
 @prefix vann: <http://purl.org/vocab/vann/> .
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
-@prefix : <https://github.com/AKSW/rdf-maturitylevel-pipeline/maturitymodel> .
+@prefix : <https://github.com/AKSW/rdf-maturitylevel-pipeline/maturitymodel/> .
 @prefix spin: <http://spinrdf.org/spin#> .
 
 <http://stream-ontology.com/maturitymodel/shapes/English/english-language-tag>
@@ -238,4 +238,3 @@ rutt:expressive-properties
     rut:testCaseLogLevel rlog:WARN ;
     a rut:ManualTestCase ;
     rdfs:seeAlso :M8 .
-
