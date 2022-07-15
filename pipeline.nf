@@ -34,7 +34,7 @@ process seeAlsoCreation {
 
     """
     export datasource_identifier=$mydatasource_identifier
-    java -cp @/app/jib-classpath-file org.aksw.rdf_processing_toolkit.cli.main.MainCliRdfProcessingToolkit integrate -o=seeAlso.ttl --out-format=TTL $shapes 'construct { ?shape rdfs:seeAlso ?metric }  where {?shape a <http://rdfunit.aksw.org/ns/core#ManualTestCase>; rdfs:seeAlso ?metric }'
+    java -cp @/app/jib-classpath-file org.aksw.rdf_processing_toolkit.cli.main.MainCliRdfProcessingToolkit integrate -o=seeAlso.ttl --out-format=TTL $shapes 'construct { ?shape rdfs:seeAlso ?metric }  where {?shape a ?t ;	rdfs:seeAlso ?metric .  FILTER (?t IN (<http://rdfunit.aksw.org/ns/core#ManualTestCase>, <http://www.w3.org/ns/shacl#NodeShape> ) ) }'
     """
 }
 

@@ -15,6 +15,35 @@
 @prefix : <https://github.com/AKSW/rdf-maturitylevel-pipeline/maturitymodel/> .
 @prefix spin: <http://spinrdf.org/spin#> .
 
+<https://github.com/AKSW/rdf-maturitylevel-pipeline/Metadata/OntologyShape> a sh:NodeShape ;
+  sh:targetClass owl:Ontology ;
+  rdfs:comment "A NodeShape for minimal content we expect to describe an Ontology." ;
+  sh:property [
+    sh:path rdfs:label ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path rdfs:comment ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path owl:priorVersion ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path owl:versionInfo ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path dcterms:modified ;
+    sh:minCount 1 ;
+  ] ;
+  sh:property [
+    sh:path dcterms:creator ;
+    sh:minCount 1 ;
+  ] ;
+  rdfs:seeAlso :M4 .
+
 <http://stream-ontology.com/maturitymodel/shapes/English/english-language-tag>
     dcterms:description "For each class and property at least a label in english should be available." ;
     rut:appliesTo rut:Schema ;
