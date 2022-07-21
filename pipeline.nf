@@ -89,17 +89,17 @@ process manipulation {
 }
 
 
-process print__ {
-  container "ubuntu"
+process save {
+  publishDir "$projectDir"
   debug true
 
   input:
     path result_manipulation
 
   output:
-    stdout o
+    path "result.ttl"
 
   """
-  cat $result_manipulation
+  cat $result_manipulation > $FILE_OUTPUT
   """
 }
