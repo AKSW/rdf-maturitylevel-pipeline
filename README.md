@@ -11,7 +11,7 @@ You need [nextflow](https://www.nextflow.io/) and [docker](https://www.docker.co
 
 ## Execution
 
-`./nextflow run pipeline.nf`
+`NXF_VER=22.04.3 ./nextflow run pipeline.nf`
 
 This writes the turtle output in a file.
 
@@ -20,6 +20,12 @@ Also the namespace used for the dataset and the *dqv:QualityMeasurementDataset* 
 
 As examples we provide the *maturityModel/maturitymodel_for_vocabularies.ttl* file with the maturity model and in *maturityModel/tests/* exemplary tests for the metrics.
 As the dataset file any *owl:Ontology* could be used.
+
+### Show report
+
+In order to show the report you have to use JekyllRDF. Clone [github.com/stream-project/data_validation_with_shacl](https://github.com/stream-project/data_validation_with_shacl), start jekyllrdf from the docker-compose.yml and put the content of the report into [Jekyll-RDF/my_page2/_data/report.ttl](https://github.com/stream-project/data_validation_with_shacl/blob/main/Jekyll-RDF/my_page2/_data/report.ttl)
+In the browser the report should be available under localhost/< ID > whereas the < ID > is the last part of the URI of the main class, e.g.: < https://github.com/AKSW/rdf-maturitylevel-pipeline/executions/**6248d398-e7ec-4f31-9415-cb0babfc52d1** >
+        rdf:type            dqv:QualityMeasurementDataset .
 
 ## Idea
 
