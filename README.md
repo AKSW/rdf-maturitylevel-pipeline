@@ -58,3 +58,4 @@ Import ones are the *data cube vocabulary* and the *data quality vocabulary*.
 * SHACL test results are not connected to their SHACL shapes, see [issue on RDFUnit](https://github.com/AKSW/RDFUnit/issues/121)
 * Jena has some issues with the *UUID* function in SPARQL, thus *iri:asGiven()* has to be used
 * The inputs are not validated - no detection if a valid maturity model was provided and that tests are existing
+* report should include commit id of repository and version of maturity model in order backtrace issues
