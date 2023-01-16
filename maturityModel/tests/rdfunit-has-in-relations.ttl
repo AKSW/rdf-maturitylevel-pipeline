@@ -65,4 +65,4 @@ rutt:has-in-relations
 
     rut:testCaseLogLevel
               rlog:WARN ;
-    rdfs:seeAlso :M1 .
+              rdfs:seeAlso :M1 .

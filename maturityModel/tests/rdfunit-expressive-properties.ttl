@@ -43,4 +43,4 @@ rutt:expressive-properties
 
     rut:testCaseLogLevel
               rlog:WARN ;
-    rdfs:seeAlso :M8 .
+              rdfs:seeAlso :M8 .
